@@ -1,12 +1,11 @@
 from setuptools import setup, find_packages
-from src.confluence import __version__
 
 with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
 setup(
     name='confluence_library',
-    version=__version__,
+    version="1.0.4",
     description='',
     long_description=long_description,
     long_description_content_type="text/markdown",
@@ -18,9 +17,6 @@ setup(
     packages=find_packages(where='src'),
 
     install_requires=[
-        'atlassian-python-api=3.41.3',
-    ],
-    setup_requires=[
         'atlassian-python-api=3.41.3',
     ],
 )
