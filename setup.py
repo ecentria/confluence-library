@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setup(
     name='confluence_library',
-    version="1.0.5",
+    version="1.0.6",
     description='',
     long_description=long_description,
     long_description_content_type="text/markdown",
@@ -14,6 +14,7 @@ setup(
     author='Dmitrij Waskowski',
     author_email='',
 
+    package_dir={'': 'src'},
     packages=find_packages(where='src'),
 
     install_requires=[
