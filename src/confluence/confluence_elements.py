@@ -37,3 +37,23 @@ class ConfluenceElements:
         content += "</ul>"
 
         return content
+
+    @staticmethod
+    def render_note(title: str, body: str) -> str:
+        return (f"<ac:structured-macro "
+                f"ac:macro-id=\"1fa0a0b5-22c9-4aec-bb4c-c4dcd0fc3b9f\" "
+                f"ac:name=\"note\" "
+                f"ac:schema-version=\"1\">"
+                f"<ac:parameter ac:name=\"title\">{title}</ac:parameter>"
+                f"<ac:rich-text-body><p>{body}</p></ac:rich-text-body>"
+                f"</ac:structured-macro>")
+
+    @staticmethod
+    def render_warning(title: str, body: str) -> str:
+        return (f"<ac:structured-macro "
+                f"ac:macro-id=\"24b6da5c-23ee-4101-9e4d-77b1f9d24ae0\" "
+                f"ac:name=\"warning\" "
+                f"ac:schema-version=\"1\">"
+                f"<ac:parameter ac:name=\"title\">{title}</ac:parameter>"
+                f"<ac:rich-text-body><p>{body}</p></ac:rich-text-body>"
+                f"</ac:structured-macro>")

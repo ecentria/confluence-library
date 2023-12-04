@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setup(
     name='confluence_library',
-    version="1.0.6",
+    version="1.1.0",
     description='',
     long_description=long_description,
     long_description_content_type="text/markdown",
