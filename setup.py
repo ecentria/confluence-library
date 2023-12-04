@@ -1,5 +1,5 @@
 from setuptools import setup, find_packages
-from confluence import __version__
+from src.confluence import __version__
 
 with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
@@ -11,11 +11,11 @@ setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
 
-    url='https://gitlab.com/dwaskowski/py-bot-library.git',
+    url='https://github.com/ecentria/confluence-library.git',
     author='Dmitrij Waskowski',
     author_email='',
 
-    packages=find_packages(exclude=[]),
+    packages=find_packages(where='src'),
 
     install_requires=[
         'atlassian-python-api',
