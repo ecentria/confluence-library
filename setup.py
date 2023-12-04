@@ -18,6 +18,9 @@ setup(
     packages=find_packages(where='src'),
 
     install_requires=[
-        'atlassian-python-api',
+        'atlassian-python-api=3.41.3',
+    ],
+    setup_requires=[
+        'atlassian-python-api=3.41.3',
     ],
 )
