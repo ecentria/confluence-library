@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setup(
     name='confluence_library',
-    version="1.0.4",
+    version="1.0.5",
     description='',
     long_description=long_description,
     long_description_content_type="text/markdown",
@@ -17,6 +17,6 @@ setup(
     packages=find_packages(where='src'),
 
     install_requires=[
-        'atlassian-python-api=3.41.3',
+        'atlassian-python-api==3.41.3',
     ],
 )
