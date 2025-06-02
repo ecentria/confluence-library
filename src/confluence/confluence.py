@@ -54,7 +54,7 @@ class ConfluenceGenerator():
         Attaches an image to the Confluence page
         """
         self.app.attach_file(
-            filepath=filename,
+            filename=filename,
             page_id=self.__page_id,
             content_type='image/png',
         )
