@@ -57,3 +57,7 @@ class ConfluenceElements:
                 f"<ac:parameter ac:name=\"title\">{title}</ac:parameter>"
                 f"<ac:rich-text-body><p>{body}</p></ac:rich-text-body>"
                 f"</ac:structured-macro>")
+    
+    @staticmethod
+    def render_image(filename: str) -> str:
+        return f"<ac:image><ri:attachment ri:filename=\"{filename}\" /></ac:image>"

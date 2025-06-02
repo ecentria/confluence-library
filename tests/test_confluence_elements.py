@@ -58,6 +58,9 @@ class TestSimple(unittest.TestCase):
     def test_render_warning(self):
         self.assertEqual(ConfluenceElements.render_warning("Title", "Body"), "<ac:structured-macro ac:macro-id=\"24b6da5c-23ee-4101-9e4d-77b1f9d24ae0\" ac:name=\"warning\" ac:schema-version=\"1\"><ac:parameter ac:name=\"title\">Title</ac:parameter><ac:rich-text-body><p>Body</p></ac:rich-text-body></ac:structured-macro>")
 
+    def test_render_image(self):
+        self.assertEqual(ConfluenceElements.render_image("image.png"), '<ac:image><ri:attachment ri:filename="image.png" /></ac:image>')
+
 
 if __name__ == '__main__':
     unittest.main()

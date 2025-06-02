@@ -49,6 +49,16 @@ class ConfluenceGenerator():
             table_data=table_data,
         )
 
+    def attach_image(self, filename: str) -> None:
+        """
+        Attaches an image to the Confluence page
+        """
+        self.app.attach_file(
+            filepath=filename,
+            page_id=self.__page_id,
+            content_type='image/png',
+        )
+
     def update_page(self):
         """
         Publishes the prepared content. If you want to test the content first,
