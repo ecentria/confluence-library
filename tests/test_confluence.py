@@ -1,8 +1,7 @@
 import unittest
 
-from unittest.mock import patch
+from unittest.mock import patch, MagicMock
 from src.confluence import HeaderSize, ConfluenceGenerator, ConfluenceElements
-from atlassian import Confluence
 from freezegun import freeze_time
 
 
@@ -22,11 +21,7 @@ class TestSimple(unittest.TestCase):
     def test_H5_fail(self):
         self.assertRaises(AttributeError)
 
-    def confluence_app(self, url: str, username: str, password: str):
-        return None
-
     @freeze_time("2012-01-01")
-    @patch.object(Confluence, '__init__', confluence_app)
     def test_append_string(self):
         confluence = ConfluenceGenerator("url", "api_username", "api_password", "page_id", "page_title")
         confluence.append_string("test")
@@ -44,9 +39,8 @@ class TestSimple(unittest.TestCase):
 
     def confluence_elements_render(title_text: str, title_size: int, table_headers: list, table_data: list):
         return "TestRender"
-    
+
     @freeze_time("2012-01-01")
-    @patch.object(Confluence, '__init__', confluence_app)
     @patch.object(ConfluenceElements, 'render', confluence_elements_render)
     def test_append_block(self):
         confluence = ConfluenceGenerator("url", "api_username", "api_password", "page_id", "page_title")
@@ -68,13 +62,13 @@ class TestSimple(unittest.TestCase):
             confluence._ConfluenceGenerator__content
         )
 
-    def confluence_update_page(self, page_id, title, body):
-        return True
-
     @freeze_time("2012-01-01")
-    @patch.object(Confluence, '__init__', confluence_app)
-    @patch.object(Confluence, 'update_page', confluence_update_page)
-    def test_update_page(self):
+    @patch('src.confluence.confluence.requests.put')
+    @patch('src.confluence.confluence.requests.get')
+    def test_update_page(self, mock_get, mock_put):
+        mock_get.return_value.json.return_value = {'version': {'number': 5}}
+        mock_put.return_value.raise_for_status = MagicMock()
+
         confluence = ConfluenceGenerator("url", "api_username", "api_password", "page_id", "page_title")
 
         self.assertEqual(
@@ -82,4 +76,21 @@ class TestSimple(unittest.TestCase):
             confluence._ConfluenceGenerator__content
         )
 
-        self.assertTrue(confluence.update_page())
+        confluence.update_page()
+
+        mock_get.assert_called_once_with("url", auth=("api_username", "api_password"))
+        mock_put.assert_called_once_with(
+            "url",
+            json={
+                "id": "page_id",
+                "status": "current",
+                "title": "page_title",
+                "body": {
+                    "representation": "storage",
+                    "value": confluence._ConfluenceGenerator__content,
+                },
+                "version": {"number": 6},
+            },
+            auth=("api_username", "api_password"),
+        )
+        mock_put.return_value.raise_for_status.assert_called_once()

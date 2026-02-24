@@ -1,7 +1,7 @@
 from enum import Enum
 from datetime import datetime
 from .confluence_elements import ConfluenceElements
-from atlassian import Confluence
+import requests
 
 
 class HeaderSize(Enum):
@@ -25,12 +25,6 @@ class ConfluenceGenerator():
         self.__page_id = page_id
         self.__page_title = page_title
 
-        self.app = Confluence(
-            url=self.__url,
-            username=self.__api_username,
-            password=self.__api_password,
-        )
-
     def append_string(self, content: str) -> None:
         """
         Appends a single string to the content
@@ -51,14 +45,44 @@ class ConfluenceGenerator():
 
     def update_page(self):
         """
-        Publishes the prepared content. If you want to test the content first,
+        Publishes the prepared content to Confluence Cloud. If you want to test the content first,
         please check printContent()
         """
-        return self.app.update_page(
-            page_id=self.__page_id,
-            title=self.__page_title,
-            body=self.__content
-        )
+        try:
+            if self.__page_id:
+                try:
+                    # Make GET request to retrieve current page info and version number
+                    page_info = requests.get(self.__url, auth=(self.__api_username, self.__api_password)).json()
+                    current_version = page_info['version']['number']
+                    # Prepare update payload
+                    update_payload = {
+                        "id": self.__page_id,
+                        "status": "current",
+                        "title": self.__page_title,
+                        "body": {
+                            "representation": "storage",
+                            "value": self.__content,
+                        },
+                        "version": {
+                            "number": current_version + 1,
+                        },
+                    }
+                    # Make PUT request to update the page
+                    response = requests.put(self.__url, json=update_payload, auth=(self.__api_username, self.__api_password))
+                    response.raise_for_status()
+                except Exception as e:
+                    raise Exception(f"An error occurred during page update: {e}")
+            else:
+                raise Exception("Page ID is not specified!")
+
+        except Exception as e:
+            print(f"An error occurred: {e}")
+
+    def get_content(self) -> str:
+        """
+        Returns the prepared content as a string. Can be used for test purposes
+        """
+        return self.__content
 
     def printContent(self) -> None:
         """
